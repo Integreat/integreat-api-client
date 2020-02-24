@@ -1,11 +1,13 @@
 {
   "extends": [
     "@integreat-app/eslint-config-jest",
-    "@integreat-app/eslint-config-flow",
     "@integreat-app/eslint-config-babel"
   ],
   "rules": {
-    "object-curly-spacing": ["off", "never"]
+    "object-curly-spacing": [
+      "off",
+      "never"
+    ]
   },
   "globals": {
     "__DEV__": false,

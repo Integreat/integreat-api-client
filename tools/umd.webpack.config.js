@@ -11,13 +11,16 @@ if (!fs.existsSync(dest)) {
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   devtool: 'source-map',
   output: {
     path: dest,
     filename: 'index-umd.js',
     library: 'integreatapiclient',
     libraryTarget: 'umd'
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
   },
   optimization: {
     // Disable name mangling so classes keep their name:
@@ -35,7 +38,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.m?ts$/,
         exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader'

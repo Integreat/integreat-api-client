@@ -1,5 +1,6 @@
 const config = {
   presets: [
+    "@babel/typescript",
     [
       "@babel/preset-env",
       {
@@ -9,8 +10,7 @@ const config = {
           "ie": "11"
         }
       }
-    ],
-    '@babel/preset-flow'
+    ]
   ],
   plugins: [
     // Partial Stage 1:

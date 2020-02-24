@@ -3,8 +3,6 @@ const rimraf = require('rimraf')
 const webpack = require('webpack')
 const task = require('./task')
 const path = require('path')
-const flowCopySource = require('flow-copy-source')
-const shell = require('shelljs')
 
 const prepare = task('prepare', () => {
   const dest = path.resolve(__dirname, '../dist')
@@ -29,22 +27,10 @@ const bundleUmd = task('bundle-umd', () => {
   })
 })
 
-const transpileES6 = task('transpile-es6', () => {
-  shell.exec('node node_modules/.bin/babel src --out-dir dist/ --source-maps --ignore \'**/*.spec.js\'')
-})
-
-const copyFlowSource = task('flow-copy', async () => {
-  await flowCopySource(['src'], 'dist', { ignore: ['**/*.spec.js'] })
-
-  fs.copyFileSync('dist/index.js.flow', 'dist/index.umd.js.flow')
-})
-
 module.exports = task('build', () => {
   global.DEBUG = process.argv.includes('--debug') || false
   rimraf.sync('www/dist/*', { nosort: true, dot: true })
   return Promise.resolve()
     .then(prepare)
-    .then(transpileES6)
-    .then(copyFlowSource)
     .then(bundleUmd)
 })

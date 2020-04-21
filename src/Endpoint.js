@@ -38,29 +38,33 @@ class Endpoint<P, T> {
     return this._stateName
   }
 
-  async fetchOrPost (url: string, formData: ?FormData): Promise<Response> {
+  async fetchOrPost (url: string, formData: ?FormData, developmentHeader?: boolean): Promise<Response> {
     try {
+      const headers = developmentHeader ? new Headers({ 'X-Integreat-Development': 'true'}) : undefined
       return fetch(url, formData ? {
         method: 'POST',
-        body: formData
-      } : {})
+        body: formData,
+        headers
+      } : { headers })
     } catch (e) {
       throw new FetchError({ endpointName: this.stateName, innerError: e })
     }
   }
 
-  async request (params: P, overrideUrl?: string): Promise<Payload<T>> {
+  async request (params: P, options?: {| overrideUrl?: string, developmentHeader?: boolean |}): Promise<Payload<T>> {
     if (this.errorOverride) {
       throw this.errorOverride
     }
 
+    const { overrideUrl, developmentHeader } = options || {}
     const url = overrideUrl || this.mapParamsToUrl(params)
+
     if (this.responseOverride) {
       return new Payload(false, url, this.responseOverride, null)
     }
 
     const formData = this.mapParamsToBody ? this.mapParamsToBody(params) : null
-    const response = await this.fetchOrPost(url, formData)
+    const response = await this.fetchOrPost(url, formData, developmentHeader)
 
     if (!response.ok) {
       throw new ResponseError({ endpointName: this.stateName, responseStatus: response.status, url, formData })

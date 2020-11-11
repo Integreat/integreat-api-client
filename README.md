@@ -1,3 +1,5 @@
+# This repository has been migrated to [integreat-app](https://github.com/Integreat/integreat-app)
+
 # Integreat API-Client
 
 Implementation of the [integreat-cms](https://github.com/Integreat/cms) endpoints ([v3](https://github.com/Integreat/cms/wiki/REST-APIv3-Documentation))
